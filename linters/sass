@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+#
+# Uses sass's compiler.
+
+
+#
+# Does this linter handle the file?
+#
+
+if [ "$1" == "--handles" ]; then
+
+  file="$2"
+  extension="${file##*.}"
+
+  # check extension
+  exit $([ "$extension" == "sass" ] || [ "$extension" == "scss" ])
+
+fi
+
+
+#
+# Lint the file.
+#
+
+# treat warnings as syntax errors
+
+# errors are indicated by non-zero exit code from sass command.
+# warnings are output on stderr; to capture them inside $(...)
+# we redirect them to stdout
+result=$(sass --no-cache --check "$1" 2>&1)
+if [ $? -eq 1 ] || [ -n "$result" ]; then
+  # output warning on stderr
+  >&2 echo $result
+  exit 1
+fi
+
+exit 0
+

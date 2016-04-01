@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+#
+# Uses coffeescript's compiler.
+# Install with: npm install -g coffee-script
+
+
+#
+# Does this linter handle the file?
+#
+
+if [ "$1" == "--handles" ]; then
+
+  file="$2"
+  extension="${file##*.}"
+
+  # check extension
+  exit $([ "$extension" == "coffee" ])
+
+fi
+
+
+#
+# Lint the file.
+#
+
+# suppress output when syntax is ok
+coffee --compile --print "$1" > /dev/null
+

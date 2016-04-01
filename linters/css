@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+#
+# Uses csslint (https://github.com/CSSLint/csslint)
+# Install with: npm install -g csslint
+
+
+#
+# Does this linter handle the file?
+#
+
+if [ "$1" == "--handles" ]; then
+
+  file="$2"
+  extension="${file##*.}"
+
+  # check extension
+  exit $([ "$extension" == "css" ])
+
+fi
+
+
+#
+# Lint the file.
+#
+
+# suppress output when syntax is ok
+csslint --errors=errors "$1" > /dev/null
+

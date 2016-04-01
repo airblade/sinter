@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+#
+# Uses acorn (https://github.com/ternjs/acorn)
+# Install with: npm install -g acorn
+
+
+#
+# Does this linter handle the file?
+#
+
+if [ "$1" == "--handles" ]; then
+
+  file="$2"
+  extension="${file##*.}"
+
+  # check extension
+  exit $([ "$extension" == "js" ])
+
+fi
+
+
+#
+# Lint the file.
+#
+
+acorn --silent "$1"
+

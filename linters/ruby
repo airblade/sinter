@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+#
+# Uses ruby's compiler.
+
+
+#
+# Does this linter handle the file?
+#
+
+if [ "$1" == "--handles" ]; then
+
+  file="$2"
+  name=$(basename "$file")
+  extension="${file##*.}"
+
+  # check extension
+  if [ "$extension" == "rb"      ] || \
+     [ "$extension" == "rake"    ] || \
+     [ "$extension" == "builder" ]
+  then
+    exit 0
+  fi
+
+  # check name
+  if [ "$name" == "Capfile"   ] || \
+     [ "$name" == "Gemfile"   ] || \
+     [ "$name" == "Rakefile"  ] || \
+     [ "$name" == "config.ru" ]
+  then
+    exit 0
+  fi
+
+  # check shebang
+  shebang=$(awk '/^#\!/ {print $2; exit}' "$file")
+  if [ "$shebang" == "ruby" ]; then
+    exit 0
+  fi
+
+  # this is not the linter you are looking for
+  exit 1
+fi
+
+
+#
+# Lint the file.
+#
+
+# suppress output when syntax is ok
+ruby -c "$1" > /dev/null
+
