@@ -82,11 +82,9 @@ Linters reside in the `linters/` directory.
 To add a new linter write a script that:
 
 - is named for the file type it checks
-- responds to the single argument `--handles` with exit status:
-  - `0` if the linter should be used for the file
-  - `1` if the linter should not be used for the file
 - when syntax is ok, produces no output and exits with `0`
 - when syntax is not ok, writes any error messages on stderr and exits with `1`
+- when the linter cannot check the file, produces no output and exits with `2`
 
 You do not need to update `sinter` or your pre-commit hooks.
 

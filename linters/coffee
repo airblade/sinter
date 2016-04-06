@@ -8,15 +8,13 @@
 # Does this linter handle the file?
 #
 
-if [ "$1" == "--handles" ]; then
 
-  file="$2"
-  extension="${file##*.}"
+file="$2"
+extension="${file##*.}"
 
-  # check extension
-  exit $([ "$extension" == "coffee" ])
+# check extension
+[ "$extension" != "coffee" ] && exit 2
 
-fi
 
 
 #

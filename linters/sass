@@ -7,15 +7,13 @@
 # Does this linter handle the file?
 #
 
-if [ "$1" == "--handles" ]; then
 
-  file="$2"
-  extension="${file##*.}"
+file="$1"
+extension="${file##*.}"
 
-  # check extension
-  exit $([ "$extension" == "sass" ] || [ "$extension" == "scss" ])
+# check extension
+[ "$extension" != "sass" ] && [ "$extension" != "scss" ] && exit 2
 
-fi
 
 
 #

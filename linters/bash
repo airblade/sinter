@@ -7,19 +7,13 @@
 # Does this linter handle the file?
 #
 
-if [ "$1" == "--handles" ]; then
 
-  file="$2"
+file="$1"
 
-  # check shebang
-  shebang=$(awk '/^#\!/ {print $2; exit}' "$file")
-  if [ "$shebang" == "bash" ]; then
-    exit 0
-  fi
+# check shebang
+shebang=$(awk '/^#\!/ {print $2; exit}' "$file")
+[ "$shebang" != "bash" ] && exit 2
 
-  # this is not the linter you are looking for
-  exit 1
-fi
 
 
 #

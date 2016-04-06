@@ -33,10 +33,6 @@ linters() {
   done
 }
 
-handles() {
-  "$1" --handles "$2"
-}
-
 lint() {
   if [ -n "$SINTER_QUIET" ]; then
     "$1" "$2" &> /dev/null
@@ -72,11 +68,14 @@ file="$1"
 # this is slower than encapsulating the logic in a factory function here
 # or a factory script.  time will tell if it's too slow.
 for linter in ${SINTER_DIR}/linters/*; do
-  if handles "$linter" "$file"; then
-    lint "$linter" "$file"
-    status=$?
-    [ $status -eq 0 ] && [ -z "$SINTER_QUIET" ] && echo "syntax ok"
-    exit $status
+  lint "$linter" "$file"
+  status=$?
+
+  if [ $status -eq 0 ]; then
+    [ -z "$SINTER_QUIET" ] && echo "syntax ok"
+    exit 0
+  elif [ $status -eq 1 ]; then
+    exit 1
   fi
 done
 

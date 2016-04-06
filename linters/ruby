@@ -7,38 +7,30 @@
 # Does this linter handle the file?
 #
 
-if [ "$1" == "--handles" ]; then
 
-  file="$2"
-  name=$(basename "$file")
-  extension="${file##*.}"
+file="$1"
+name=$(basename "$file")
+extension="${file##*.}"
 
-  # check extension
-  if [ "$extension" == "rb"      ] || \
-     [ "$extension" == "rake"    ] || \
-     [ "$extension" == "builder" ]
-  then
-    exit 0
-  fi
+extension() {
+  [ "$extension" == "rb"      ] || \
+  [ "$extension" == "rake"    ] || \
+  [ "$extension" == "builder" ]
+}
 
-  # check name
-  if [ "$name" == "Capfile"   ] || \
-     [ "$name" == "Gemfile"   ] || \
-     [ "$name" == "Rakefile"  ] || \
-     [ "$name" == "config.ru" ]
-  then
-    exit 0
-  fi
+name() {
+  [ "$name" == "Capfile"   ] || \
+  [ "$name" == "Gemfile"   ] || \
+  [ "$name" == "Rakefile"  ] || \
+  [ "$name" == "config.ru" ]
+}
 
-  # check shebang
+shebang() {
   shebang=$(awk '/^#\!/ {print $2; exit}' "$file")
-  if [ "$shebang" == "ruby" ]; then
-    exit 0
-  fi
+  [ "$shebang" == "ruby" ]
+}
 
-  # this is not the linter you are looking for
-  exit 1
-fi
+! (extension || name || shebang) && exit 2
 
 
 #

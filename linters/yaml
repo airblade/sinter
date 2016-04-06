@@ -7,24 +7,12 @@
 # Does this linter handle the file?
 #
 
-if [ "$1" == "--handles" ]; then
 
-  file="$2"
-  extension="${file##*.}"
+file="$2"
+extension="${file##*.}"
 
-  # # check for linter dependency
-  # if ! type yamllint > /dev/null 2>&1; then
-  #   exit 1
-  # fi
-
-  # check extension
-  if [ "$extension" == "yml" ] || [ "$extension" == "yaml" ]; then
-    exit 0
-  fi
-
-  # this is not the linter you are looking for
-  exit 1
-fi
+# check extension
+[ "$extension" != "yml" ] && [ "$extension" != "yaml" ] && exit 2
 
 
 #
