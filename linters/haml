@@ -7,7 +7,7 @@
 # Does this linter handle the file?
 #
 
-file="$2"
+file="$1"
 extension="${file##*.}"
 
 # check extension
