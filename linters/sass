@@ -28,7 +28,7 @@ extension="${file##*.}"
 result=$(sass --no-cache --check "$1" 2>&1)
 if [ $? -eq 1 ] || [ -n "$result" ]; then
   # output warning on stderr
-  >&2 echo $result
+  >&2 echo "$result"
   exit 1
 fi
 
