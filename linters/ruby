@@ -26,7 +26,7 @@ name() {
 }
 
 shebang() {
-  shebang=$(awk '/^#\!/ {print $2; exit}' "$file")
+  shebang=$(head -n1 "$file" | grep '^#!' | cut -d' ' -f2)
   [ "$shebang" == "ruby" ]
 }
 
