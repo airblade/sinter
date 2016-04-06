@@ -80,5 +80,5 @@ for linter in ${SINTER_DIR}/linters/*; do
   fi
 done
 
-echo "no linter for $(basename "$file")"
+echo "no linter for $(basename "$file")" && exit 2
 
