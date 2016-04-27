@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+#
+# Uses vim directly.
+# Replace with https://github.com/syngan/vim-vimlint
+# (endorsed in https://github.com/scrooloose/syntastic/issues/725)?
+
+
+#
+# Does this linter handle the file?
+#
+
+
+file="$1"
+extension="${file##*.}"
+
+# check extension
+[ "$extension" != "vim" ] && exit 2
+
+
+#
+# Lint the file.
+#
+
+vim -e -u NONE -N -c "source $1 | quit"
+
