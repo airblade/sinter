@@ -20,6 +20,9 @@ fi
 
 error=0
 
+# http://unix.stackexchange.com/a/84980/88207
+tmpdir=$(mktemp -d 2>/dev/null || mktemp -d -t 'sinter')
+
 # Loop over (A)dded (C)opied or (M)odified text files and output all
 # files with syntax errors, not just the first.
 #
@@ -28,8 +31,6 @@ error=0
 # outside the loop.
 while read -r file; do
 
-  # http://unix.stackexchange.com/a/84980/88207
-  tmpdir=$(mktemp -d 2>/dev/null || mktemp -d -t 'sinter')
   tmpfile="$tmpdir/$(basename "$file")"
 
   git show ":$file" > "$tmpfile"
