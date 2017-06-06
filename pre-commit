@@ -12,10 +12,10 @@ git symbolic-ref --short -q HEAD > /dev/null || exit 0
 
 # derive basis for diff
 if git-rev-parse --verify HEAD &> /dev/null; then
-	against=HEAD
+  against=HEAD
 else
-	# initial commit: diff against an empty tree object
-	against=4b825dc642cb6eb9a060e54bf8d69288fbee4904
+  # initial commit: diff against an empty tree object
+  against=4b825dc642cb6eb9a060e54bf8d69288fbee4904
 fi
 
 error=0
