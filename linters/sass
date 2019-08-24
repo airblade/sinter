@@ -23,10 +23,8 @@ extension="${file##*.}"
 # treat warnings as syntax errors
 
 # errors are indicated by non-zero exit code from sass command.
-# warnings are output on stderr; to capture them inside $(...)
-# we redirect them to stdout
-result=$(sass --no-cache --check "$1" 2>&1)
-if [ $? -eq 1 ] || [ -n "$result" ]; then
+result=$(node_modules/.bin/node-sass -q "$1" > /dev/null)
+if [ $? -eq 1 ]; then
   # output warning on stderr
   >&2 echo "$result"
   exit 1
