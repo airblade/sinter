@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+is_slim() {
+  [ "$2" == "slim" ]
+}
+
+lint_slim() {
+  slimrb "$1"
+}

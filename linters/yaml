@@ -1,23 +1,9 @@
 #!/usr/bin/env bash
-#
-# Uses ruby's stdlib.
 
+is_yaml() {
+  [ "$2" == "yaml" ] || [ "$2" == "yaml" ]
+}
 
-#
-# Does this linter handle the file?
-#
-
-
-file="$1"
-extension="${file##*.}"
-
-# check extension
-[ "$extension" != "yml" ] && [ "$extension" != "yaml" ] && exit 2
-
-
-#
-# Lint the file.
-#
-
-ruby -e "require 'yaml'; YAML.load_file('$1')"
-
+lint_yaml() {
+  ruby -e "require 'yaml'; YAML.load_file('$1')"
+}

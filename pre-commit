@@ -36,6 +36,8 @@ while read -r file; do
   git show ":$file" > "$tmpfile"
 
   sinter -q "$tmpfile"
+
+  # ignore exit code 2 (no linter for file)
   if [ $? -eq 1 ]; then
     error=1
     echo syntax error in "$file"

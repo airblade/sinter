@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+#
+# Uses eslint (https://eslint.org)
+
+is_javascript() {
+  [ "$2" == "js" ]
+}
+
+lint_javascript() {
+  eslint --quiet --no-eslintrc --env browser --parser-options=ecmaVersion:6,sourceType:module "$1"
+}

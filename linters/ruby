@@ -1,42 +1,19 @@
 #!/usr/bin/env bash
-#
-# Uses ruby's compiler.
 
+is_ruby() {
+  [ "$2" == "rb" ]      || \
+  [ "$2" == "rake" ]    || \
+  [ "$2" == "builder" ] || \
 
-#
-# Does this linter handle the file?
-#
+  [ "$1" == "Capfile"   ] || \
+  [ "$1" == "Gemfile"   ] || \
+  [ "$1" == "Rakefile"  ] || \
+  [ "$1" == "config.ru" ] || \
 
-
-file="$1"
-name=$(basename "$file")
-extension="${file##*.}"
-
-extension() {
-  [ "$extension" == "rb"      ] || \
-  [ "$extension" == "rake"    ] || \
-  [ "$extension" == "builder" ]
+  [ "$3" == "ruby" ]
 }
 
-name() {
-  [ "$name" == "Capfile"   ] || \
-  [ "$name" == "Gemfile"   ] || \
-  [ "$name" == "Rakefile"  ] || \
-  [ "$name" == "config.ru" ]
+lint_ruby() {
+  ruby -c "$1"
 }
-
-shebang() {
-  shebang=$(head -n1 "$file" | grep '^#!' | cut -d' ' -f2)
-  [ "$shebang" == "ruby" ]
-}
-
-! (extension || name || shebang) && exit 2
-
-
-#
-# Lint the file.
-#
-
-# suppress output when syntax is ok
-ruby -c "$1" > /dev/null
 

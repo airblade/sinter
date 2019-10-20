@@ -1,24 +1,9 @@
 #!/usr/bin/env bash
-#
-# Uses haml's compiler.
 
+is_haml() {
+  [ "$2" == "haml" ]
+}
 
-#
-# Does this linter handle the file?
-#
-
-file="$1"
-extension="${file##*.}"
-
-# check extension
-[ "$extension" != "haml" ] && exit 2
-
-
-
-#
-# Lint the file.
-#
-
-# suppress output when syntax is ok
-haml --check "$1" > /dev/null
-
+lint_haml() {
+  haml --check "$1"
+}

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+is_vimscript() {
+  [ "$2" == "vim" ]
+}
+
+lint_vimscript() {
+  vim --clean -e -S "$1" -c q
+}

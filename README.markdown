@@ -29,14 +29,14 @@ The linters have these dependencies:
 
 Linter | Dependency |
 -------|------------|
-bash | (bash) |
-coffee | npm install -g coffee-script |
-css | npm install -g csslint |
-erb | (ruby) |
-haml | (haml) |
-js | npm install -f acorn |
-ruby | (ruby) |
-sass | (sass) |
+bash | bash |
+css | csslint |
+haml | haml |
+javascript | eslint |
+ruby | ruby |
+sass | sass-lint |
+slim | slimrb |
+vimscript | vim |
 yaml | ruby |
 
 
@@ -81,10 +81,14 @@ Linters reside in the `linters/` directory.
 
 To add a new linter write a script that:
 
-- is named for the file type it checks
-- when syntax is ok, produces no output and exits with `0`
-- when syntax is not ok, writes any error messages on stderr and exits with `1`
-- when the linter cannot check the file, produces no output and exits with `2`
+- is named for the file type it checks;
+- implements `is_foo()`:
+  - it receives the filename, extension, and shebang as arguments
+  - it must exit with success or failure;
+- implements `lint_foo()`:
+  - it receives the full file path as an argument;
+  - it should write any syntax errors to stderr;
+  - it must exit with success or failure.
 
 You do not need to update `sinter` or your pre-commit hooks.
 

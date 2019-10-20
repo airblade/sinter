@@ -1,25 +1,10 @@
 #!/usr/bin/env bash
-#
-# Uses bash.
 
+is_bash() {
+  [ "$3" == "bash" ]
+}
 
-#
-# Does this linter handle the file?
-#
-
-
-file="$1"
-
-# check shebang
-shebang=$(head -n1 "$file" | grep '^#!' | cut -d' ' -f2)
-[ "$shebang" != "bash" ] && exit 2
-
-
-
-#
-# Lint the file.
-#
-
-# suppress output when syntax is ok
-bash -n "$1" > /dev/null
+lint_bash() {
+  bash -n "$1"
+}
 

@@ -1,7 +1,0 @@
-# TO DO
-
-- Tests (with [bats](https://github.com/sstephenson/bats)).
-
-- version & usage stuff cf [bats](https://github.com/sstephenson/bats/blob/master/libexec/bats)
-
-- option processing cf [bats](https://github.com/sstephenson/bats/blob/master/libexec/bats)

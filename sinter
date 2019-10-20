@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck source=/dev/null
 
 
 # Resolving symlinks
@@ -16,13 +17,13 @@ abs_dirname() {
   local path="$1"
 
   while [ -n "$path" ]; do
-    cd "${path%/*}"
+    cd "${path%/*}" || exit
     local name="${path##*/}"
     path="$(resolve_link "$name" || true)"
   done
 
   pwd
-  cd "$cwd"
+  cd "$cwd" || exit
 }
 
 SINTER_DIR="$(abs_dirname "$0")"
@@ -33,51 +34,68 @@ linters() {
   done
 }
 
-lint() {
-  if [ -n "$SINTER_QUIET" ]; then
-    "$1" "$2" &> /dev/null
-  else
-    "$1" "$2"
-  fi
+filename() {
+  basename "$1"
+}
+
+extension() {
+  [[ "$1" == *.* ]] && echo "${1##*.}" || echo ""
+}
+
+shebang() {
+  head -n1 "$1" | grep '^#!' | cut -d' ' -f2
 }
 
 
-command="$1"
-case "$command" in
---linters )
-  linters
-  exit
-  ;;
-
--q | --quiet )
-  export SINTER_QUIET=1
-  shift
-  ;;
-
-* )
-  ;;
-esac
-
-
-
-file="$1"
-
 # open/closed principle: discover linters at runtime so we don't have to
 # modify this file when extending functionality with new linters.
-#
-# this is slower than encapsulating the logic in a factory function here
-# or a factory script.  time will tell if it's too slow.
-for linter in ${SINTER_DIR}/linters/*; do
-  lint "$linter" "$file"
-  status=$?
 
-  if [ $status -eq 0 ]; then
-    [ -z "$SINTER_QUIET" ] && echo "syntax ok"
-    exit 0
-  elif [ $status -eq 1 ]; then
-    exit 1
-  fi
+# source each linter
+for linter in ${SINTER_DIR}/linters/*; do
+  . "$linter"
 done
 
-echo "no linter for $(basename "$file")" && exit 2
+
+main() {
+  local name extension shebang
+  name="$(filename "$1")"
+  extension="$(extension "$1")"
+  shebang="$(shebang "$1")"
+
+  IFS=$'\n' read -d "" -ra functions < <(declare -F)
+  for fn in "${functions[@]//declare -f }"; do
+    [[ "$fn" == is_* ]] && $fn "$name" "$extension" "$shebang" && {
+      if "${fn/is/lint}" "$1" >/dev/null 2>sinter.stderr; then
+        [ -z "$SINTER_QUIET" ] && echo syntax ok
+        rm sinter.stderr
+        exit 0
+      else
+        [ -z "$SINTER_QUIET" ] && echo syntax error && cat sinter.stderr
+        rm sinter.stderr
+        exit 1
+      fi
+    }
+  done
+
+  [ -z "$SINTER_QUIET" ] && echo no linter for "$name"
+  exit 2
+}
+
+
+case "$1" in
+  --linters )
+    linters
+    exit
+    ;;
+
+  -q | --quiet )
+    export SINTER_QUIET=1
+    shift
+    ;;
+
+  * )
+    ;;
+esac
+
+[ -n "$1" ] && main "$@" || echo No file specified
 
