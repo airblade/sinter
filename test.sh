@@ -122,21 +122,20 @@ main() {
   shellcheck -s bash sinter || exit 1
   . sinter > /dev/null
 
+  head="-> Running tests on sinter..."
+  printf '\n%s\n%s\n' "$head" "${head//?/-}"
 
-    head="-> Running tests on sinter..."
-    printf '\n%s\n%s\n' "$head" "${head//?/-}"
+  # Generate the list of tests to run.
+  IFS=$'\n' read -d "" -ra funcs < <(declare -F)
+  for func in "${funcs[@]//declare -f }"; do
+    [[ "$func" == test_* ]] && "$func";
+  done
 
-    # Generate the list of tests to run.
-    IFS=$'\n' read -d "" -ra funcs < <(declare -F)
-    for func in "${funcs[@]//declare -f }"; do
-        [[ "$func" == test_* ]] && "$func";
-    done
+  comp="Completed $((fail+pass)) tests. ${pass:-0} passed, ${fail:-0} failed."
+  printf '%s\n%s\n\n' "${comp//?/-}" "$comp"
 
-    comp="Completed $((fail+pass)) tests. ${pass:-0} passed, ${fail:-0} failed."
-    printf '%s\n%s\n\n' "${comp//?/-}" "$comp"
-
-    # If a test failed, exit with '1'.
-    ((fail>0)) || exit 0 && exit 1
+  # If a test failed, exit with '1'.
+  ((fail>0)) || exit 0 && exit 1
 }
 
 main "$@"
