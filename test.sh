@@ -74,9 +74,10 @@ test_sinter_syntax_ok() {
 
 test_sinter_syntax_error() {
   echo 'puts "foo' > testfile.rb
-  result="$(sinter testfile.rb)"
+  result="$(sinter testfile.rb 2>test.stderr)"
   assert_equals 1 $?
-  assert_equals "syntax error" "$(head -n1 <<< $result)"
+  assert_equals "syntax error" "$result"
+  assert_equals "testfile.rb:1: unterminated string meets end of file" "$(cat test.stderr)"
 
   result="$(sinter -q testfile.rb)"
   assert_equals 1 $?
@@ -116,7 +117,7 @@ assert_equals() {
 
 
 main() {
-  trap 'rm testfile.*' EXIT
+  trap 'rm testfile.* test.stderr' EXIT
 
   # Run shellcheck and source the code.
   shellcheck -s bash sinter || exit 1

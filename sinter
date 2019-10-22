@@ -70,7 +70,7 @@ main() {
         rm sinter.stderr
         exit 0
       else
-        [ -z "$SINTER_QUIET" ] && echo syntax error && cat sinter.stderr
+        [ -z "$SINTER_QUIET" ] && echo syntax error && cat sinter.stderr >&2
         rm sinter.stderr
         exit 1
       fi

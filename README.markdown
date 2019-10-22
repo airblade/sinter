@@ -48,7 +48,7 @@ To check a file:
 
 If `FILE` is syntactically correct sinter will output `syntax ok`.  The exit code is 0.
 
-If `FILE` has syntax errors they will be written to stderr.  The exit code is 1.
+If `FILE` has syntax errors sinter will output `syntax error` on stdout and the errors on stderr.  The exit code is 1.
 
 If sinter doesn't know how to check `FILE` it will output `no linter for FILE`.  The exit code is 2.
 
