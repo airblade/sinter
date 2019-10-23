@@ -5,5 +5,5 @@ is_slim() {
 }
 
 lint_slim() {
-  slimrb "$1"
+  slimrb -c "$1"
 }
