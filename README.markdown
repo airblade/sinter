@@ -36,7 +36,7 @@ javascript | eslint |
 ruby | ruby |
 sass | sass-lint |
 slim | slimrb |
-vimscript | vim |
+vimscript | [vint](https://github.com/Kuniwak/vint) |
 yaml | ruby |
 
 

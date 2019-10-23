@@ -5,5 +5,5 @@ is_vimscript() {
 }
 
 lint_vimscript() {
-  vim --clean -e -S "$1" -c q
+  vint -e "$1"
 }
