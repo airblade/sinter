@@ -30,11 +30,11 @@ The linters have these dependencies:
 Linter | Dependency |
 -------|------------|
 bash | bash |
-css | csslint |
+css | [csslint](https://github.com/CSSLint/csslint) |
 haml | haml |
-javascript | eslint |
+javascript | [eslint](https://eslint.org) |
 ruby | ruby |
-sass | sass-lint |
+sass | [sass-lint](https://github.com/sasstools/sass-lint) |
 slim | slimrb |
 vimscript | [vint](https://github.com/Kuniwak/vint) |
 yaml | ruby |
