@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 #
-# Uses eslint (https://eslint.org)
+# Uses eslint (https://eslint.org) v8.8.0
+#
+# Installed with `yarn global add eslint`
 
 is_javascript() {
   [ "$2" == "js" ]
 }
 
 lint_javascript() {
-  eslint --quiet --no-eslintrc --env browser --parser-options=ecmaVersion:6,sourceType:module "$1"
+  eslint --env browser --parser-options ecmaVersion:2022,sourceType:module --quiet "$1"
 }
