@@ -19,6 +19,8 @@ fi
 
 error=0
 
+# http://unix.stackexchange.com/a/84980/88207
+tmpdir=$(mktemp -d 2>/dev/null || mktemp -d -t 'sinter')
 
 # Loop over (A)dded (C)opied or (M)odified text files and output all
 # files with syntax errors, not just the first.
@@ -28,13 +30,19 @@ error=0
 # outside the loop.
 while read -r file; do
 
-  sinter -q "$file"
+  tmpfile="$tmpdir/$(basename "$file")"
+
+  git show ":$file" > "$tmpfile"
+
+  sinter -q "$tmpfile"
 
   # ignore exit code 2 (no linter for file)
   if [ $? -eq 1 ]; then
     error=1
     echo syntax error in "$file"
   fi
+
+  rm "$tmpfile"
 
 done < <(
   git diff-index --cached --name-only --diff-filter=ACM $against -z |
