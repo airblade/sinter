@@ -34,7 +34,7 @@ css | [csslint](https://github.com/CSSLint/csslint) |
 haml | haml |
 javascript | [eslint](https://eslint.org) |
 ruby | ruby |
-sass | [sass-lint](https://github.com/sasstools/sass-lint) |
+sass | [sass](https://github.com/sass/dart-sass) |
 slim | slimrb |
 vimscript | [vint](https://github.com/Kuniwak/vint) |
 yaml | ruby |
