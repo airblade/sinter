@@ -5,12 +5,11 @@
 #
 
 
-# only run when on a branch (to avoid rebase confusion)
+# Only run when on a branch (to avoid rebase confusion)
 #
 # NOTE: copy-pasted; not sure if necessary
 git symbolic-ref --short -q HEAD > /dev/null || exit 0
 
-# derive basis for diff
 if git-rev-parse --verify HEAD &> /dev/null; then
   against=HEAD
 else
