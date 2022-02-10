@@ -61,17 +61,18 @@ main() {
   name="$(filename "$1")"
   extension="$(extension "$1")"
   shebang="$(shebang "$1")"
+  errlog=sinter.$$.stderr
 
   IFS=$'\n' read -d "" -ra functions < <(declare -F)
   for fn in "${functions[@]//declare -f }"; do
     [[ "$fn" == is_* ]] && $fn "$name" "$extension" "$shebang" && {
-      if "${fn/is/lint}" "$1" >/dev/null 2>sinter.stderr; then
+      if "${fn/is/lint}" "$1" >/dev/null 2>$errlog; then
         [ -z "$SINTER_QUIET" ] && echo syntax ok
-        rm sinter.stderr
+        rm $errlog
         exit 0
       else
-        [ -z "$SINTER_QUIET" ] && echo syntax error && cat sinter.stderr >&2
-        rm sinter.stderr
+        [ -z "$SINTER_QUIET" ] && echo syntax error && cat $errlog >&2
+        rm $errlog
         exit 1
       fi
     }

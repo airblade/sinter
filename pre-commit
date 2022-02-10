@@ -18,37 +18,38 @@ else
 fi
 
 error=0
-
-# http://unix.stackexchange.com/a/84980/88207
-tmpdir=$(mktemp -d 2>/dev/null || mktemp -d -t 'sinter')
+pids=()
 
 # Loop over (A)dded (C)opied or (M)odified text files and output all
 # files with syntax errors, not just the first.
 #
-# Use named pipe (process substitution) to feed list to while loop
-# so we can change the value of `error` inside the loop and see it
-# outside the loop.
-while read -r file; do
-
-  tmpfile="$tmpdir/$(basename "$file")"
-
-  git show ":$file" > "$tmpfile"
-
-  sinter -q "$tmpfile"
-
-  # ignore exit code 2 (no linter for file)
-  if [ $? -eq 1 ]; then
-    error=1
-    echo syntax error in "$file"
-  fi
-
-  rm "$tmpfile"
-
-done < <(
+# Use background processes to parallelise the checks.
+for file in $(
   git diff-index --cached --name-only --diff-filter=ACM $against -z |
   xargs -0 file --mime |
   awk -F":[ ]*" '$2 ~ /^text/ {print $1}'
-)
+); do
+  (
+    err=0
+    tmpfile="$(dirname "$file")/sinter.$$.$(basename "$file")"
+    git show ":$file" > "$tmpfile"
+    sinter -q "$tmpfile"
+
+    # ignore exit code 2 (no linter for file)
+    if [ $? -eq 1 ]; then
+      err=1
+      echo syntax error in "$file"
+    fi
+
+    rm "$tmpfile"
+    exit $err
+  ) & pids+=($!)
+done
+
+for pid in ${pids[*]}; do
+  if ! wait $pid; then
+    error=1
+  fi
+done
 
 exit $error
-
